@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json ./
 # COPY .npmrc .
 COPY yarn.lock ./
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc yarn install
+RUN --mount=type=secret,id=npm,target=/root/.npmrc yarn install
 
 
 FROM node:16 as build
