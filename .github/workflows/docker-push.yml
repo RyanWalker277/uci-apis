@@ -19,7 +19,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build ./v2/uci --file v2/uci/Dockerfile --tag ryanwalker277/uci-apis:$(date +%s)
+      run: docker build ./v2/uci --file v2/uci/Dockerfile --no-cache --tag ryanwalker277/uci-apis:$(date +%s)
       
     - name: Docker Push
       run: docker push ryanwalker277/uci-apis
