@@ -21,7 +21,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./v2/uci
+        file: ./v2/uci/Dockerfile
         push: false
         tags: v1
 
