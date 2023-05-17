@@ -1,6 +1,7 @@
 FROM node:16 AS install
 WORKDIR /app
 COPY package.json ./
+ENV TOKEN=${{secrets.TOKEN}}
 COPY .npmrc .
 COPY yarn.lock ./
 RUN yarn install
