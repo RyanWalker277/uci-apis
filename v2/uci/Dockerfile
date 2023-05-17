@@ -1,10 +1,9 @@
 FROM node:16 AS install
 WORKDIR /app
 COPY package.json ./
-ENV TOKEN=${{secrets.TOKEN}}
-COPY .npmrc .
+# COPY .npmrc .
 COPY yarn.lock ./
-RUN yarn install
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc yarn install
 
 
 FROM node:16 as build
