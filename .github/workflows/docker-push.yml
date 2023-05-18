@@ -36,6 +36,5 @@ jobs:
         with:
           context: "./v2/uci"
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: 123
+          tags: v1.2.3
           build-args: NPM_TOKEN=${{secrets.TOKEN}}
