@@ -1,28 +1,3 @@
-# name: Docker Image CI
-
-# on:
-#   push:
-#     branches: [ gha ]
-
-# jobs:
-
-#   build:
-
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: docker login
-#         env:
-#           DOCKER_USER: ${{secrets.DOCKER_USER}}
-#           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-#         run: |
-#           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
-#       - name: Build the Docker image
-#         run: docker build --build-arg NPM_TOKEN=${{secrets.TOKEN}} --no-cache --tag ryanwalker277/uci-apis:$(date +%s) ./v2/uci
-#       - name: Docker Push
-#         run: docker push ryanwalker277/uci-apis:$(date +%s)    
-
 name: Docker Image CI
 
 on:
@@ -30,22 +5,11 @@ on:
     branches: [ gha ]
 
 env:
-  # Use docker.io for Docker Hub if empty
   REGISTRY: docker.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: uci-apis
 
 jobs:
-
-  # build:
-
-  #   runs-on: ubuntu-latest
-
-    # steps:
-    # - uses: actions/checkout@v3
-    # - name: Build the Docker image
-    #   run: docker build --build-arg NPM_TOKEN=${{secrets.TOKEN}} --no-cache --tag ryanwalker277/uci-apis:$(date +%s) ./v2/uci
-  push_to_registry:
+  build:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
