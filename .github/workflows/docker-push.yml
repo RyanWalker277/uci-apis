@@ -1,8 +1,8 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ gha ]
+  release:
+    types: [created]
 
 env:
   REGISTRY: docker.io
@@ -36,6 +36,6 @@ jobs:
         with:
           context: "./v2/uci"
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ github.event.release.tag_name }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: NPM_TOKEN=${{secrets.TOKEN}}
