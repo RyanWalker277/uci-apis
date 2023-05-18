@@ -36,5 +36,5 @@ jobs:
         with:
           context: "./v2/uci"
           push: true
-          tags: v1.2.3
+          tags: gha
           build-args: NPM_TOKEN=${{secrets.TOKEN}}
