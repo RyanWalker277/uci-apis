@@ -21,4 +21,4 @@ jobs:
       - name: Build the Docker image
         run: docker build --build-arg NPM_TOKEN=${{secrets.TOKEN}} --no-cache --tag ryanwalker277/uci-apis:$(date +%s) ./v2/uci
       - name: Docker Push
-        run: docker push ryanwalker277/uci-apis    
+        run: docker push ryanwalker277/uci-apis:$(date +%s)    
