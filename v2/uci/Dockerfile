@@ -1,9 +1,12 @@
 FROM node:16 AS install
 WORKDIR /app
 COPY package.json ./
-# COPY .npmrc .
+COPY .npmrc .
+ARG NPM_TOKEN
+RUN sed -i "s|${NPM_TOKEN}|${NPM_TOKEN}|g" /app/.npmrc
 COPY yarn.lock ./
-RUN --mount=type=secret,id=npm,target=/root/.npmrc yarn install
+RUN yarn install
+RUN rm -f .npmrc
 
 
 FROM node:16 as build
