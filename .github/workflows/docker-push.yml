@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: uci-apis
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
