@@ -29,10 +29,8 @@ jobs:
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         with:
           context: "./v2/uci"
           push: true
-          tags: ryanwalker277/uci-apis:develop-$RELEASE_VERSION
+          tags: ryanwalker277/uci-apis:develop-${{ steps.vars.outputs.tag }}
           build-args: NPM_TOKEN=${{secrets.TOKEN}}
