@@ -1,0 +1,47 @@
+name: NestJS API CI
+
+on:
+  push:
+    branches: [github_ci]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Get Current Coverage
+        run: |
+          # Calculate the current average coverage based on the main branch
+          npx jest --coverage --coverageReporters="json-summary" --passWithNoTests
+          CURRENT_AVERAGE_COVERAGE=$(echo "scale=2; ($(jq -r '.total.lines.pct' coverage/coverage-summary.json) + $(jq -r '.total.statements.pct' coverage/coverage-summary.json) + $(jq -r '.total.functions.pct' coverage/coverage-summary.json) + $(jq -r '.total.branches.pct' coverage/coverage-summary.json)) / 4" | bc)
+          echo "Current Average Coverage: $CURRENT_AVERAGE_COVERAGE%"
+          echo "CURRENT_COVERAGE=$CURRENT_AVERAGE_COVERAGE" >> $GITHUB_ENV
+
+      - name: Calculate PR Coverage
+        run: |
+          # Calculate the average coverage for the current PR code
+          npx jest --coverage --coverageReporters="json-summary" HEAD^..HEAD
+          PR_AVERAGE_COVERAGE=$(echo "scale=2; ($(jq -r '.total.lines.pct' coverage/coverage-summary.json) + $(jq -r '.total.statements.pct' coverage/coverage-summary.json) + $(jq -r '.total.functions.pct' coverage/coverage-summary.json) + $(jq -r '.total.branches.pct' coverage/coverage-summary.json)) / 4" | bc)
+          echo "PR Average Coverage: $PR_AVERAGE_COVERAGE%"
+          
+          # Get the current coverage threshold from the environment
+          CURRENT_COVERAGE_THRESHOLD=$CURRENT_COVERAGE
+          
+          # Check if the PR coverage is less than the current coverage
+          if (( $(echo "$PR_AVERAGE_COVERAGE < $CURRENT_COVERAGE_THRESHOLD" | bc -l) )); then
+            echo "Coverage in this PR is lower than the current code."
+            echo "::error::Coverage in this PR is below the threshold of $CURRENT_COVERAGE_THRESHOLD%. PR coverage is $PR_AVERAGE_COVERAGE%."
+          else
+            echo "Coverage in this PR is above or equal to the current code."
+          fi
