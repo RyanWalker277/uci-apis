@@ -45,3 +45,17 @@
 #           else
 #             echo "Coverage in this PR is above or equal to the current code."
 #           fi
+
+
+name: 'coverage'
+on:
+    push:
+        branches:
+            - master
+            - main
+jobs:
+    coverage:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ArtiomTr/jest-coverage-report-action@v2
